@@ -1,6 +1,7 @@
 import sys
 import math
 import bfs
+import dfs
 
 methods = ['bfs', 'dfs', 'ast', 'ida']
 
@@ -13,6 +14,10 @@ else:
         board_arr = board_str.split(',')
         rows = math.sqrt(len(board_arr))
         cols = rows
-        print('board: %s' % str(board_arr))
+        switch = {
+            'bfs': bfs.run(board_arr),
+            'dfs': dfs.run(board_arr)
+        }
+        switch[method]
     else:
         print '<method> must be bfs|dfs|ast|ida'
