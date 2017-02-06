@@ -1,7 +1,4 @@
-import sys
-import math
-import bfs
-import dfs
+import sys, bfs, dfs, ast, ida
 
 methods = ['bfs', 'dfs', 'ast', 'ida']
 
@@ -12,12 +9,12 @@ else:
     board_str = sys.argv[2]
     if method in methods:
         board_arr = board_str.split(',')
-        rows = math.sqrt(len(board_arr))
-        cols = rows
         switch = {
-            'bfs': bfs.run(board_arr),
-            'dfs': dfs.run(board_arr)
+            'bfs': bfs.run,
+            'dfs': dfs.run,
+            'ast': ast.run,
+            'ida': ida.run
         }
-        switch[method]
+        switch[method](board_arr)
     else:
         print '<method> must be bfs|dfs|ast|ida'
