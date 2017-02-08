@@ -9,12 +9,13 @@ else:
     board_str = sys.argv[2]
     if method in methods:
         board_arr = board_str.split(',')
+        goal = map(str, range(0, len(board_arr)))
         switch = {
             'bfs': bfs.run,
             'dfs': dfs.run,
             'ast': ast.run,
             'ida': ida.run
         }
-        switch[method](board_arr)
+        switch[method](board_arr, goal)
     else:
         print '<method> must be bfs|dfs|ast|ida'
