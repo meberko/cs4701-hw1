@@ -3,7 +3,7 @@ import math, Queue
 def up_action(board_arr,blank_idx,r,c):
     b_arr = list(board_arr)
     if blank_idx / r != 0:
-        swap(b_arr, blank_idx, blank_idx - 3)
+        swap(b_arr, blank_idx, blank_idx - r)
         return b_arr
     else:
         return []
@@ -11,7 +11,7 @@ def up_action(board_arr,blank_idx,r,c):
 def down_action(board_arr,blank_idx,r,c):
     b_arr = list(board_arr)
     if blank_idx / r != r-1:
-        swap(b_arr, blank_idx, blank_idx + 3)
+        swap(b_arr, blank_idx, blank_idx + r)
         return b_arr
     else:
         return []
