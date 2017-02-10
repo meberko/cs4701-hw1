@@ -1,5 +1,4 @@
 import sys, time, bfs, dfs, ast, ida
-import timeit as ti
 import resource as re
 
 def main():

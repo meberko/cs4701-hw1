@@ -1,122 +1,79 @@
-import math
-
-def up_action(board_arr,blank_idx,r,c):
-    b_arr = list(board_arr)
-    if blank_idx / r != 0:
-        swap(b_arr, blank_idx, blank_idx - r)
-        return b_arr
-    else:
-        return []
-
-def down_action(board_arr,blank_idx,r,c):
-    b_arr = list(board_arr)
-    if blank_idx / r != r-1:
-        swap(b_arr, blank_idx, blank_idx + r)
-        return b_arr
-    else:
-        return []
-
-def left_action(board_arr,blank_idx,r,c):
-    b_arr = list(board_arr)
-    if blank_idx % r != 0:
-        swap(b_arr, blank_idx, blank_idx - 1)
-        return b_arr
-    else:
-        return []
-
-def right_action(board_arr,blank_idx,r,c):
-    b_arr = list(board_arr)
-    if blank_idx % r != r-1:
-        swap(b_arr, blank_idx, blank_idx + 1)
-        return b_arr
-    else:
-        return []
-
-def swap(a,i,j):
-    tmp = a[i]
-    a[i] = a[j]
-    a[j] = tmp
-
-def print_board(b_arr,r,c):
-    print 'Board:'
-    for i in range(0,r):
-        for j in range(0,c):
-            print b_arr[r*i+j],
-        print
-    print
+import math, sets, util
 
 def run(board_arr, goal):
-    visited = []
-    path_to_goal = ''
-    cost_of_path = 0
-    nodes_expanded = 0
-    fringe_size = 0
-    max_fringe_size = 0
-    search_depth = 0
-    max_search_depth = 0
+    cost_of_path = nodes_expanded = fringe_size = max_fringe_size = search_depth = max_search_depth = 0
     goal_unfound = True
-    rows = int(math.sqrt(len(board_arr)))
-    cols = rows
+    rows = cols = int(math.sqrt(len(board_arr)))
+    path_to_goal = []
     fringe = []
-    paths = []
+    fringe_set = set()
+    visited = set()
 
-    fringe.append(board_arr)
-    paths.append('')
+    fringe.append(util.Node(board_arr, None, None, 0))
+    fringe_set.add(util.Node(board_arr, None, None, 0))
     fringe_size += 1
     max_fringe_size += 1
-    while not fringe == [] and goal_unfound:
-        print str(paths)
+    while goal_unfound:
         # Remove
-        curr_board = fringe.pop()
-        curr_path = paths.pop()
-        visited.append(curr_board)
-        fringe_size -= 1
-        search_depth = len(curr_path.split(' ')[1:])
+        curr_node = fringe.pop() # Pop current config
+        curr_board = curr_node.board_arr
+        visited.add(curr_node) # Add current config to visited
+        search_depth = curr_node.depth
         blank_idx = curr_board.index('0')
-
-        print_board(curr_board, rows,cols)
+        print search_depth
 
         # Check
         if curr_board == goal:
             goal_unfound = False
-            path_to_goal = curr_path.split(' ')[1:]
-            cost_of_path = len(path_to_goal)
+            fringe_size = len(fringe)
+            while True:
+                try:
+                    path_to_goal.append(curr_node.move)
+                    if curr_node.depth == 1:
+                        cost_of_path = len(path_to_goal)
+                        path_to_goal.reverse()
+                        break
+                    curr_node = curr_node.parent
+                except:
+                    break
+            print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
+            return
 
         # Expand
-        else:
-            nodes_expanded += 1
+        nodes_expanded += 1
 
-            right_board = right_action(curr_board, blank_idx, rows, cols)
-            if not right_board == []:
-                if not right_board in visited:
-                    fringe.append(right_board)
-                    paths.append(curr_path+' Right')
-                    fringe_size += 1
+        right_node = util.Node(util.right_action(curr_board, blank_idx, rows, cols), curr_node, 'Right', search_depth+1)
+        if right_node.board_arr and right_node not in visited | fringe_set:
+            fringe.append(right_node)
+            fringe_set.add(right_node)
 
-            left_board = left_action(curr_board, blank_idx, rows, cols)
-            if not left_board == []:
-                if not left_board in visited:
-                    fringe.append(left_board)
-                    paths.append(curr_path+' Left')
-                    fringe_size += 1
+        left_node = util.Node(util.left_action(curr_board, blank_idx, rows, cols), curr_node, 'Left', search_depth+1)
+        if left_node.board_arr and left_node not in visited | fringe_set:
+            fringe.append(left_node)
+            fringe_set.add(left_node)
 
-            down_board = down_action(curr_board, blank_idx, rows, cols)
-            if not down_board == []:
-                if not down_board in visited:
-                    fringe.append(down_board)
-                    paths.append(curr_path+' Down')
-                    fringe_size += 1
+        down_node = util.Node(util.down_action(curr_board, blank_idx, rows, cols), curr_node, 'Down', search_depth+1)
+        if down_node.board_arr and down_node not in visited | fringe_set:
+            fringe.append(down_node)
+            fringe_set.add(down_node)
 
-            up_board = up_action(curr_board, blank_idx, rows, cols)
-            if not up_board == []:
-                if not up_board in visited:
-                    fringe.append(up_board)
-                    paths.append(curr_path+' Up')
-                    fringe_size += 1
+        up_node = util.Node(util.up_action(curr_board, blank_idx, rows, cols), curr_node, 'Up', search_depth+1)
+        if up_node.board_arr and up_node not in visited | fringe_set:
+            fringe.append(up_node)
+            fringe_set.add(up_node)
 
-            if search_depth == max_search_depth:
-                max_search_depth += 1
-            if fringe_size > max_fringe_size:
-                max_fringe_size = fringe_size
-    print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d\n" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
+        fringe_size = len(fringe)
+        max_search_depth = max(search_depth+1, max_search_depth)
+        max_fringe_size = max(fringe_size, max_fringe_size)
+    actions = {
+        'Up': util.up_action,
+        'Down': util.down_action,
+        'Left': util.left_action,
+        'Right': util.right_action
+    }
+    last_board = board_arr
+    util.print_board(board_arr, rows, cols)
+    for move in path_to_goal:
+        last_board = actions[move](last_board, last_board.index('0'), rows, cols)
+        util.print_board(last_board, rows, cols)
 
