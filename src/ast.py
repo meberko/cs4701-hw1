@@ -14,7 +14,7 @@ def run(board_arr, goal):
     fringe_set.add(util.Node(board_arr, None, None, 0))
     fringe_size += 1
     max_fringe_size += 1
-    while not fringe == [] and goal_unfound:
+    while fringe and goal_unfound:
         # Remove
         curr_node = heapq.heappop(fringe)[1]
         curr_board = curr_node.board_arr
@@ -38,7 +38,7 @@ def run(board_arr, goal):
                 except:
                     break
             print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
-            return
+            return True
 
         # Expand
         nodes_expanded += 1
@@ -66,5 +66,4 @@ def run(board_arr, goal):
         fringe_size = len(fringe)
         max_search_depth = max(search_depth, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
-
-
+    return False

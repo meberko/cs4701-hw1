@@ -19,7 +19,8 @@ def main():
                 'ida': ida.run
             }
             start = time.clock()
-            switch[method](board_arr, goal)
+            if not switch[method](board_arr, goal):
+                print 'solution not found using '+method
             running_time = time.clock() - start
             max_ram_usage = re.getrusage(re.RUSAGE_SELF).ru_maxrss
             print('running_time: %f' % (running_time))
