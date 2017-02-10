@@ -41,22 +41,22 @@ def run(board_arr, goal):
         # Expand
         nodes_expanded += 1
         up_node = util.Node(util.up_action(curr_board, blank_idx, rows, cols), curr_node, 'Up', search_depth+1)
-        if not up_node.board_arr == [] and up_node not in visited | fringe_set:
+        if not up_node.board_arr == [] and up_node not in visited and up_node not in fringe_set:
             fringe.put(up_node)
             fringe_set.add(up_node)
 
         down_node = util.Node(util.down_action(curr_board, blank_idx, rows, cols), curr_node, 'Down', search_depth+1)
-        if not down_node.board_arr == [] and down_node not in visited | fringe_set:
+        if not down_node.board_arr == [] and down_node not in visited and down_node not in fringe_set:
             fringe.put(down_node)
             fringe_set.add(down_node)
 
         left_node = util.Node(util.left_action(curr_board, blank_idx, rows, cols), curr_node, 'Left', search_depth+1)
-        if not left_node.board_arr == [] and left_node not in visited | fringe_set:
+        if not left_node.board_arr == [] and left_node not in visited and left_node not in fringe_set:
             fringe.put(left_node)
             fringe_set.add(left_node)
 
         right_node = util.Node(util.right_action(curr_board, blank_idx, rows, cols), curr_node, 'Right', search_depth+1)
-        if not right_node.board_arr == [] and right_node not in visited | fringe_set:
+        if not right_node.board_arr == [] and right_node not in visited and right_node not in fringe_set:
             fringe.put(right_node)
             fringe_set.add(right_node)
         fringe_size = fringe.qsize()

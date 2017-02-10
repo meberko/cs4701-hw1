@@ -1,69 +1,68 @@
-import math, heapq, util
+import math, sets, util, time
 
 def run(board_arr, goal):
-    visited = []
-    path_to_goal = ''
-    cost_of_path = 0
-    nodes_expanded = 0
-    fringe_size = 0
-    max_fringe_size = 0
-    search_depth = 0
-    max_search_depth = 0
+    cost_of_path = nodes_expanded = fringe_size = max_fringe_size = search_depth = max_search_depth = 0
     goal_unfound = True
-    rows = int(math.sqrt(len(board_arr)))
-    cols = rows
+    rows = cols = int(math.sqrt(len(board_arr)))
+    path_to_goal = []
     fringe = []
+    fringe_set = set()
+    visited = set()
 
-    priority = util.get_manhattan_priority(board_arr, rows, cols)
-    heapq.heappush(fringe, (priority, board_arr, ''))
+    fringe.append(util.Node(board_arr, None, None, 0))
+    fringe_set.add(util.Node(board_arr, None, None, 0))
     fringe_size += 1
     max_fringe_size += 1
-    while not fringe == [] and goal_unfound:
+    max_time = 0
+    while goal_unfound:
+        start = time.clock()
         # Remove
-        curr = heapq.heappop(fringe)
-        curr_board = curr[1]
-        curr_path = curr[2]
-        visited.append(curr_board)
-        fringe_size -= 1
-        search_depth = len(curr_path.split(' ')[1:])
+        curr_node = fringe.pop() # Pop current config
+        curr_board = curr_node.board_arr
+        visited.add(curr_node) # Add current config to visited
+        search_depth = curr_node.depth
         blank_idx = curr_board.index('0')
 
         # Check
         if curr_board == goal:
             goal_unfound = False
-            path_to_goal = curr_path.split(' ')[1:]
-            cost_of_path = len(path_to_goal)
+            fringe_size = len(fringe)
+            while True:
+                try:
+                    path_to_goal.append(curr_node.move)
+                    if curr_node.depth == 1:
+                        cost_of_path = len(path_to_goal)
+                        path_to_goal.reverse()
+                        break
+                    curr_node = curr_node.parent
+                except:
+                    break
+            print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
+            return
 
         # Expand
-        else:
-            nodes_expanded += 1
-            up_board = util.up_action(curr_board, blank_idx, rows, cols)
-            if not up_board == []:
-                if not up_board in visited:
-                    heapq.heappush(fringe, (util.get_manhattan_priority(up_board, rows, cols), up_board, curr_path + ' Up'))
-                    fringe_size += 1
+        nodes_expanded += 1
 
-            down_board = util.down_action(curr_board, blank_idx, rows, cols)
-            if not down_board == []:
-                if not down_board in visited:
-                    heapq.heappush(fringe, (util.get_manhattan_priority(down_board, rows, cols), down_board, curr_path + ' Down'))
-                    fringe_size += 1
+        right_node = util.Node(util.right_action(curr_board, blank_idx, rows, cols), curr_node, 'Right', search_depth+1)
+        if right_node.board_arr and right_node not in visited and right_node not in fringe_set:
+            fringe.append(right_node)
+            fringe_set.add(right_node)
 
-            left_board = util.left_action(curr_board, blank_idx, rows, cols)
-            if not left_board == []:
-                if not left_board in visited:
-                    heapq.heappush(fringe, (util.get_manhattan_priority(left_board, rows, cols), left_board, curr_path + ' Left'))
-                    fringe_size += 1
+        left_node = util.Node(util.left_action(curr_board, blank_idx, rows, cols), curr_node, 'Left', search_depth+1)
+        if left_node.board_arr and left_node not in visited and left_node not in fringe_set:
+            fringe.append(left_node)
+            fringe_set.add(left_node)
 
-            right_board = util.right_action(curr_board, blank_idx, rows, cols)
-            if not right_board == []:
-                if not right_board in visited:
-                    heapq.heappush(fringe, (util.get_manhattan_priority(right_board, rows, cols), right_board, curr_path + ' Right'))
-                    fringe_size += 1
-            if search_depth == max_search_depth:
-                max_search_depth += 1
-            if fringe_size > max_fringe_size:
-                max_fringe_size = fringe_size
-    print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d\n" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
+        down_node = util.Node(util.down_action(curr_board, blank_idx, rows, cols), curr_node, 'Down', search_depth+1)
+        if down_node.board_arr and down_node not in visited and down_node not in fringe_set:
+            fringe.append(down_node)
+            fringe_set.add(down_node)
 
+        up_node = util.Node(util.up_action(curr_board, blank_idx, rows, cols), curr_node, 'Up', search_depth+1)
+        if up_node.board_arr and up_node not in visited and up_node not in fringe_set:
+            fringe.append(up_node)
+            fringe_set.add(up_node)
 
+        fringe_size = len(fringe)
+        max_search_depth = max(search_depth, max_search_depth)
+        max_fringe_size = max(fringe_size, max_fringe_size)

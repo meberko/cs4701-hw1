@@ -44,27 +44,27 @@ def run(board_arr, goal):
         nodes_expanded += 1
 
         up_node = util.Node(util.up_action(curr_board, blank_idx, rows, cols), curr_node, 'Up', search_depth+1)
-        if up_node.board_arr and up_node not in visited | fringe_set:
+        if up_node.board_arr and up_node not in visited and up_node not in fringe_set:
             heapq.heappush(fringe, (util.get_manhattan_priority(up_node.board_arr, rows, cols)+curr_node.depth+1, up_node))
             fringe_set.add(up_node)
 
         down_node = util.Node(util.down_action(curr_board, blank_idx, rows, cols), curr_node, 'Down', search_depth+1)
-        if down_node.board_arr and down_node not in visited | fringe_set:
+        if down_node.board_arr and down_node not in visited and down_node not in fringe_set:
             heapq.heappush(fringe, (util.get_manhattan_priority(down_node.board_arr, rows, cols)+curr_node.depth+1, down_node))
             fringe_set.add(down_node)
 
         left_node = util.Node(util.left_action(curr_board, blank_idx, rows, cols), curr_node, 'Left', search_depth+1)
-        if left_node.board_arr and left_node not in visited | fringe_set:
+        if left_node.board_arr and left_node not in visited and left_node not in fringe_set:
             heapq.heappush(fringe, (util.get_manhattan_priority(left_node.board_arr, rows, cols)+curr_node.depth+1, left_node))
             fringe_set.add(left_node)
 
         right_node = util.Node(util.right_action(curr_board, blank_idx, rows, cols), curr_node, 'Right', search_depth+1)
-        if right_node.board_arr and right_node not in visited | fringe_set:
+        if right_node.board_arr and right_node not in visited and right_node not in fringe_set:
             heapq.heappush(fringe, (util.get_manhattan_priority(right_node.board_arr, rows, cols)+curr_node.depth+1, right_node))
             fringe_set.add(right_node)
 
         fringe_size = len(fringe)
-        max_search_depth = max(search_depth+1, max_search_depth)
+        max_search_depth = max(search_depth, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
 
 
