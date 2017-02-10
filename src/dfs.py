@@ -15,7 +15,6 @@ def run(board_arr, goal):
     max_fringe_size += 1
     max_time = 0
     while goal_unfound:
-        start = time.clock()
         # Remove
         curr_node = fringe.pop() # Pop current config
         curr_board = curr_node.board_arr
