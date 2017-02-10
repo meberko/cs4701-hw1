@@ -18,6 +18,7 @@ def run(board_arr, goal):
         curr_node = fringe.get()
         curr_board = curr_node.board_arr
         search_depth = curr_node.depth
+        max_search_depth = max(search_depth, max_search_depth)
         visited.add(curr_node)
         fringe_size -= 1
         blank_idx = curr_board.index('0')

@@ -23,8 +23,8 @@ def main():
                 print 'solution not found using '+method
             running_time = time.clock() - start
             max_ram_usage = re.getrusage(re.RUSAGE_SELF).ru_maxrss
-            print('running_time: %f' % (running_time))
-            print('max_ram_usage: %f' % (max_ram_usage))
+            print('running_time: %.8f' % (running_time))
+            print('max_ram_usage: %.8f' % (max_ram_usage))
         else:
             print '<method> must be bfs|dfs|ast|ida'
 

@@ -20,6 +20,7 @@ def run(board_arr, goal):
         curr_board = curr_node.board_arr
         visited.add(curr_node) # Add current config to visited
         search_depth = curr_node.depth
+        max_search_depth = max(search_depth, max_search_depth)
         blank_idx = curr_board.index('0')
 
         # Check
@@ -63,6 +64,5 @@ def run(board_arr, goal):
             fringe_set.add(up_node)
 
         fringe_size = len(fringe)
-        max_search_depth = max(search_depth, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
     return False
