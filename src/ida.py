@@ -5,7 +5,7 @@ def run(board_arr, goal):
     found = ''
     while found == '':
         found = run_dls(board_arr, goal, depth)
-        depth += 10
+        depth += 1
     return found
 
 def run_dls(board_arr, goal, curr_depth):
