@@ -2,11 +2,11 @@ import math, sets, util, time
 
 def run(board_arr, goal):
     depth = 1
-    found = False
-    while not found:
+    found = ''
+    while found == '':
         found = run_dls(board_arr, goal, depth)
         depth += 10
-    return ("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
+    return found
 
 def run_dls(board_arr, goal, curr_depth):
     cost_of_path = nodes_expanded = fringe_size = max_fringe_size = search_depth = max_search_depth = 0
@@ -45,7 +45,7 @@ def run_dls(board_arr, goal, curr_depth):
                     curr_node = curr_node.parent
                 except:
                     break
-            return True
+            return ("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
 
         # Expand
         nodes_expanded += 1
@@ -72,4 +72,4 @@ def run_dls(board_arr, goal, curr_depth):
 
         fringe_size = len(fringe)
         max_fringe_size = max(fringe_size, max_fringe_size)
-    return False
+    return ''
