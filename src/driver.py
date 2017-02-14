@@ -23,7 +23,7 @@ def main():
             running_time = time.clock() - start
             max_ram_usage = re.getrusage(re.RUSAGE_SELF).ru_maxrss
             s = s + ('\nrunning_time: %.8f\n' % (running_time))
-            s = s + ('max_ram_usage: %.8f' % (max_ram_usage))
+            s = s + ('max_ram_usage: %.8f\n' % (max_ram_usage))
             f = open('output.txt', 'w')
             f.write(s)
             f.close()
