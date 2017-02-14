@@ -14,13 +14,14 @@ def run(board_arr, goal):
     fringe_set.add(util.Node(board_arr, None, None, 0))
     fringe_size += 1
     max_fringe_size += 1
-    while not fringe == [] and goal_unfound:
+    while fringe and goal_unfound:
         # Remove
         curr_node = heapq.heappop(fringe)[1]
         curr_board = curr_node.board_arr
         visited.add(curr_node)
         fringe_size -= 1
         search_depth = curr_node.depth
+        max_search_depth = max(search_depth, max_search_depth)
         blank_idx = curr_board.index('0')
 
         # Check
@@ -63,7 +64,5 @@ def run(board_arr, goal):
             fringe_set.add(right_node)
 
         fringe_size = len(fringe)
-        max_search_depth = max(search_depth, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
-
-
+    return False

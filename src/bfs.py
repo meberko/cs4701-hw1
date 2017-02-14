@@ -13,11 +13,12 @@ def run(board_arr, goal):
     fringe_set.add(util.Node(board_arr, None, None, 0))
     fringe_size += 1
     max_fringe_size += 1
-    while goal_unfound:
+    while not fringe.empty() and goal_unfound:
         # Remove
         curr_node = fringe.get()
         curr_board = curr_node.board_arr
         search_depth = curr_node.depth
+        max_search_depth = max(search_depth, max_search_depth)
         visited.add(curr_node)
         fringe_size -= 1
         blank_idx = curr_board.index('0')
@@ -61,4 +62,4 @@ def run(board_arr, goal):
         fringe_size = fringe.qsize()
         max_search_depth = max(search_depth+1, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
-
+    return False

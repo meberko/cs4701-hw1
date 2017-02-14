@@ -1,7 +1,7 @@
 import math, sets, util, time
 
 def run(board_arr, goal):
-    depth = 30
+    depth = 1
     found = False
     while not found:
         found = run_dls(board_arr, goal, depth)
@@ -28,6 +28,7 @@ def run_dls(board_arr, goal, curr_depth):
         curr_board = curr_node.board_arr
         visited.add(curr_node) # Add current config to visited
         search_depth = curr_node.depth
+        max_search_depth = max(search_depth, max_search_depth)
         blank_idx = curr_board.index('0')
 
         # Check
@@ -70,6 +71,5 @@ def run_dls(board_arr, goal, curr_depth):
             fringe_set.add(up_node)
 
         fringe_size = len(fringe)
-        max_search_depth = max(search_depth, max_search_depth)
         max_fringe_size = max(fringe_size, max_fringe_size)
     return False
