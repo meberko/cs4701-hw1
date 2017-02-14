@@ -19,11 +19,14 @@ def main():
                 'ida': ida.run
             }
             start = time.clock()
-            switch[method](board_arr, goal)
+            s = switch[method](board_arr, goal)
             running_time = time.clock() - start
             max_ram_usage = re.getrusage(re.RUSAGE_SELF).ru_maxrss
-            print('running_time: %f' % (running_time))
-            print('max_ram_usage: %f' % (max_ram_usage))
+            s = s+('\nrunning_time: %f\n' % (running_time))
+            s = s+('max_ram_usage: %f' % (max_ram_usage))
+            f = open('output.txt', 'w')
+            f.write(s)
+            f.close()
         else:
             print '<method> must be bfs|dfs|ast|ida'
 

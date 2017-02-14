@@ -6,6 +6,7 @@ def run(board_arr, goal):
     while not found:
         found = run_dls(board_arr, goal, depth)
         depth += 10
+    return ("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
 
 def run_dls(board_arr, goal, curr_depth):
     cost_of_path = nodes_expanded = fringe_size = max_fringe_size = search_depth = max_search_depth = 0
@@ -43,7 +44,6 @@ def run_dls(board_arr, goal, curr_depth):
                     curr_node = curr_node.parent
                 except:
                     break
-            print("path_to_goal: %s\ncost_of_path: %d\nnodes_expanded: %d\nfringe_size: %d\nmax_fringe_size: %d\nsearch_depth: %d\nmax_search_depth: %d" % (str(path_to_goal), cost_of_path, nodes_expanded, fringe_size, max_fringe_size, search_depth, max_search_depth))
             return True
 
         # Expand
